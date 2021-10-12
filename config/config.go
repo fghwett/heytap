@@ -7,8 +7,8 @@ import (
 )
 
 type Conf struct {
-	Config     Config     `yaml:"config"`
-	ServerChan ServerChan `yaml:"serverChan"`
+	Config     *Config     `yaml:"config"`
+	ServerChan *ServerChan `yaml:"serverChan"`
 }
 
 type Config struct {
