@@ -1,6 +1,7 @@
 package task
 
 import (
+	"fmt"
 	"log"
 	"testing"
 
@@ -20,8 +21,9 @@ func init() {
 
 func TestNew(t *testing.T) {
 	task := New(conf.Config)
-	err := task.signTask()
+	err := task.viewGoodsTask()
 	if err != nil {
 		t.Error(err)
 	}
+	fmt.Println(task.result)
 }

@@ -1,8 +1,9 @@
 package task
 
 type Response struct {
-	Code int         `json:"code"`
-	Data interface{} `json:"data"`
+	Code         int64       `json:"code"`
+	ErrorMessage string      `json:"errorMessage"`
+	Data         interface{} `json:"data"`
 }
 
 // 获取用户信息返回值
@@ -87,4 +88,42 @@ type Gift struct {
 type SignResponse struct {
 	Result  string `json:"result"`
 	Message string `json:"message"`
+}
+
+// 获取商品列表返回值
+type GoodsResponse struct {
+	Meta   Meta           `json:"meta"`
+	Detail []*GoodsDetail `json:"detail"`
+}
+
+type Meta struct {
+	Code int `json:"code"`
+}
+
+type GoodsDetail struct {
+	Id                   int     `json:"id"`
+	Skuid                int     `json:"skuid"`
+	Url                  string  `json:"url"`
+	CategoryId           int     `json:"categoryId"`
+	Title                string  `json:"title"`
+	SecondTitle          string  `json:"secondTitle"`
+	Price                float64 `json:"price"`
+	OriginalPrice        float64 `json:"originalPrice"`
+	MarketPrice          string  `json:"marketPrice"`
+	Link                 string  `json:"link"`
+	Seq                  int     `json:"seq"`
+	PriceLabel           string  `json:"priceLabel"`
+	ButtonStatus         int     `json:"buttonStatus"`
+	ButtonStatusDesc     string  `json:"buttonStatusDesc"`
+	Spuid                int     `json:"spuid"`
+	CategoryDesc         string  `json:"categoryDesc"`
+	GoodsTopCategoryId   int     `json:"goodsTopCategoryId"`
+	GoodsTopCategoryName string  `json:"goodsTopCategoryName"`
+	GoodsCategoryId      int     `json:"goodsCategoryId"`
+	GoodsCategoryName    string  `json:"goodsCategoryName"`
+}
+
+// 浏览商品返回值
+type ViewGoodsResponse struct {
+	Meta Meta `json:"meta"`
 }
