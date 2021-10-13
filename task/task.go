@@ -296,3 +296,79 @@ func (t *Task) cashingCredits(infoMarking string, infoType int, infoCredits int)
 
 	return nil
 }
+
+func (t *Task) shareGoodsTask() error {
+	center, err := t.taskCenter()
+	if err != nil {
+		return err
+	}
+
+	util.SmallSleep(500, 1500)
+
+	todayList := &List{}
+	for _, list := range center.EverydayList {
+		if list.Name == "分享商品到微信" {
+			todayList = list
+		}
+	}
+
+	if todayList.CompleteStatus == 0 {
+		count := todayList.ReadCount
+		endCount := todayList.Times
+		if count < endCount {
+			if shareErr := t.shareGoods(); shareErr != nil {
+				return shareErr
+			}
+
+			util.SmallSleep(2000, 5000)
+			count++
+		}
+
+		if err := t.cashingCredits(todayList.Marking, todayList.Type, todayList.Credits); err != nil {
+			return err
+		}
+
+		t.result = append(t.result, fmt.Sprintf("【每日分享商品】：任务完成！积分领取+%d", todayList.Credits))
+	} else if todayList.CompleteStatus == 1 {
+		if err := t.cashingCredits(todayList.Marking, todayList.Type, todayList.Credits); err != nil {
+			return err
+		}
+
+		t.result = append(t.result, fmt.Sprintf("【每日分享商品】：任务完成！积分领取+%d", todayList.Credits))
+	} else {
+		t.result = append(t.result, "【每日分享商品】：任务已完成！")
+	}
+
+	return nil
+}
+
+func (t *Task) shareGoods() error {
+	reqUrl := fmt.Sprintf("https://msec.opposhop.cn/users/vi/creditsTask/pushTask?marking=daily_sharegoods")
+	req, err := http.NewRequest(http.MethodGet, reqUrl, nil)
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("clientPackage", "com.oppo.store")
+	req.Header.Set("Host", "store.oppo.com")
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("User-Agent", "okhttp/3.12.12.200sp1")
+	req.Header.Set("Accept-Encoding", "gzip")
+	req.Header.Set("cookie", t.cookie)
+
+	resp, err := t.client.Do(req)
+
+	response := &ShareGoodsResponse{}
+	err = util.GetHTTPResponse(resp, reqUrl, err, response)
+	if err != nil {
+		return err
+	}
+
+	if response.Meta.Code != 200 {
+		return fmt.Errorf("分享商品失败 %v", err)
+	}
+
+	return nil
+}

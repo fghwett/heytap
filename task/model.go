@@ -92,7 +92,7 @@ type SignResponse struct {
 
 // 获取商品列表返回值
 type GoodsResponse struct {
-	Meta   Meta           `json:"meta"`
+	Meta   *Meta          `json:"meta"`
 	Detail []*GoodsDetail `json:"detail"`
 }
 
@@ -125,5 +125,11 @@ type GoodsDetail struct {
 
 // 浏览商品返回值
 type ViewGoodsResponse struct {
-	Meta Meta `json:"meta"`
+	Meta *Meta `json:"meta"`
+}
+
+// 分享商品返回值
+type ShareGoodsResponse struct {
+	Meta *Meta  `json:"meta"`
+	Msg  string `json:"msg"`
 }

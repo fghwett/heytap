@@ -21,7 +21,7 @@ func init() {
 
 func TestNew(t *testing.T) {
 	task := New(conf.Config)
-	err := task.viewGoodsTask()
+	err := task.shareGoodsTask()
 	if err != nil {
 		t.Error(err)
 	}
