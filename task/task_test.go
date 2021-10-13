@@ -1,7 +1,6 @@
 package task
 
 import (
-	"fmt"
 	"log"
 	"testing"
 
@@ -21,9 +20,8 @@ func init() {
 
 func TestNew(t *testing.T) {
 	task := New(conf.Config)
-	err := task.getUserInfo()
+	err := task.signTask()
 	if err != nil {
 		t.Error(err)
 	}
-	fmt.Println(task.username)
 }
