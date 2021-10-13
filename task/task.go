@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/fghwett/heytap/config"
@@ -27,12 +28,26 @@ func New(config *config.Config) *Task {
 	}
 }
 
-func (t *Task) Do() error {
+func (t *Task) Do() {
 	if err := t.getUserInfo(); err != nil {
-		return err
+		t.result = append(t.result, fmt.Sprintf("【登陆失败】：%s", err))
+		return
 	}
 
-	return nil
+	if err := t.signTask(); err != nil {
+		t.result = append(t.result, fmt.Sprintf("【每日签到】：失败 %s", err))
+		return
+	}
+
+	if err := t.viewGoodsTask(); err != nil {
+		t.result = append(t.result, fmt.Sprintf("【每日浏览商品】：失败 %s", err))
+		return
+	}
+
+	if err := t.shareGoodsTask(); err != nil {
+		t.result = append(t.result, fmt.Sprintf("【每日分享商品】：失败 %s", err))
+		return
+	}
 }
 
 func (t *Task) getUserInfo() error {
@@ -371,4 +386,8 @@ func (t *Task) shareGoods() error {
 	}
 
 	return nil
+}
+
+func (t *Task) GetResult() string {
+	return strings.Join(t.result, " \n\n ")
 }
