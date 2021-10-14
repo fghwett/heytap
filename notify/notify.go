@@ -3,6 +3,7 @@ package notify
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/fghwett/heytap/util"
 )
@@ -13,7 +14,7 @@ type Response struct {
 }
 
 func Send(secretKey string, title string, content string) error {
-	reqUrl := fmt.Sprintf("https://sctapi.ftqq.com/%s.send?title=%s&desp=%s", secretKey, title, content)
+	reqUrl := fmt.Sprintf("https://sctapi.ftqq.com/%s.send?title=%s&desp=%s", secretKey, title, url.QueryEscape(content))
 
 	req, err := http.NewRequest(http.MethodGet, reqUrl, nil)
 	if err != nil {
