@@ -330,7 +330,11 @@ func (t *Task) shareGoodsTask() error {
 	if todayList.CompleteStatus == 0 {
 		count := todayList.ReadCount
 		endCount := todayList.Times
-		if count < endCount {
+		for {
+			if count >= endCount {
+				break
+			}
+
 			if shareErr := t.shareGoods(); shareErr != nil {
 				return shareErr
 			}
