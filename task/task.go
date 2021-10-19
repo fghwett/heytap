@@ -134,7 +134,12 @@ func (t *Task) signTask() error {
 		if _, ok := todayGist.Type.(string); ok {
 			reqData = fmt.Sprintf("amount=%d", todayGist.Credits)
 		} else {
-			reqData = fmt.Sprintf("amount=%d&type=%d&gift=%d", todayGist.Credits, int64(todayGist.Type.(float64)), int64(todayGist.Gift.(float64)))
+			reqData = fmt.Sprintf("amount=%d&type=%d&gift=", todayGist.Credits, int64(todayGist.Type.(float64)))
+			if _, ok := todayGist.Gift.(float64); ok {
+				reqData += fmt.Sprintf("%d", int64(todayGist.Gift.(float64)))
+			} else {
+				reqData += todayGist.Gift.(string)
+			}
 		}
 	} else {
 		reqData = fmt.Sprintf("amount=%d", todayGist.Credits)
