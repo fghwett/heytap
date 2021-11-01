@@ -10,6 +10,7 @@ import (
 
 func GetHTTPResponse(resp *http.Response, url string, err error, result interface{}) error {
 	body, err := GetHTTPResponseOrg(resp, url, err)
+	fmt.Printf("接口：%s 结果：%s", url, string(body))
 
 	if err == nil {
 		log.Println(string(body))
